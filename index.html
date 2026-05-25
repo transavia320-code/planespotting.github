@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spotter.net</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(-45deg,#08111f,#102342,#183760,#0d1f36);
+background-size:400% 400%;
+animation:bgMove 15s ease infinite;
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at 20% 20%,rgba(255,255,255,0.08),transparent 20%),
+radial-gradient(circle at 80% 40%,rgba(255,255,255,0.05),transparent 20%),
+radial-gradient(circle at 40% 80%,rgba(255,255,255,0.05),transparent 20%);
+animation:particles 15s linear infinite;
+pointer-events:none;
+}
+
+@keyframes particles{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-25px);}
+100%{transform:translateY(0px);}
+}
+
+header{
+position:sticky;
+top:0;
+z-index:1000;
+padding:22px;
+font-size:38px;
+font-weight:900;
+text-align:center;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(14px);
+letter-spacing:2px;
+cursor:pointer;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,0.4);
+}
+
+header::after{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+animation:shine 4s infinite;
+}
+
+@keyframes shine{
+100%{left:120%;}
+}
+
+.container{
+width:95%;
+max-width:1500px;
+margin:auto;
+padding:30px 0;
+animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.search-box{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:35px;
+}
+
+.search-box input{
+width:320px;
+padding:15px;
+border:none;
+border-radius:16px;
+outline:none;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(10px);
+color:white;
+font-size:16px;
+transition:0.3s;
+}
+
+.search-box input::placeholder{
+color:#dce7ff;
+}
+
+.search-box input:focus{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(84,156,255,0.8);
+}
+
+.search-box button,
+.back-btn{
+padding:15px 22px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#2f5fa7,#4f8dff);
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.search-box button:hover,
+.back-btn:hover{
+transform:translateY(-4px) scale(1.05);
+box-shadow:0 0 30px rgba(79,141,255,0.8);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+position:relative;
+padding:35px;
+border-radius:24px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+overflow:hidden;
+cursor:pointer;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+transition:0.4s;
+animation:cardAppear 0.8s ease;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.card span{
+position:relative;
+z-index:2;
+}
+
+.card::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:conic-gradient(transparent,rgba(255,255,255,0.15),transparent 30%);
+animation:rotate 5s linear infinite;
+}
+
+.card::after{
+content:"";
+position:absolute;
+inset:3px;
+background:rgba(10,20,35,0.92);
+border-radius:22px;
+}
+
+@keyframes rotate{
+100%{transform:rotate(360deg);}
+}
+
+@keyframes cardAppear{
+from{
+opacity:0;
+transform:translateY(40px) scale(0.9);
+}
+
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+.card:hover{
+transform:translateY(-10px) scale(1.03);
+box-shadow:0 0 35px rgba(84,156,255,0.5);
+}
+
+.aircraft{
+position:relative;
+overflow:hidden;
+border-radius:24px;
+background:rgba(255,255,255,0.07);
+backdrop-filter:blur(12px);
+transition:0.4s;
+animation:cardAppear 0.7s ease;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.aircraft:hover{
+transform:translateY(-10px) scale(1.02);
+box-shadow:0 0 40px rgba(0,0,0,0.45);
+}
+
+.aircraft img{
+width:100%;
+height:240px;
+object-fit:cover;
+display:block;
+transition:0.6s;
+cursor:pointer;
+}
+
+.aircraft:hover img{
+transform:scale(1.12);
+filter:brightness(1.1);
+}
+
+.info{
+padding:18px;
+}
+
+.info h3{
+font-size:22px;
+margin-bottom:5px;
+}
+
+.info p{
+color:#c8d7f0;
+}
+
+h2{
+font-size:34px;
+margin:25px 0;
+text-align:center;
+}
+
+.hidden{
+display:none;
+}
+
+#viewer{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.95);
+backdrop-filter:blur(15px);
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:5000;
+animation:viewerFade 0.3s ease;
+}
+
+@keyframes viewerFade{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+#viewer img{
+max-width:92%;
+max-height:82%;
+border-radius:20px;
+box-shadow:0 0 45px rgba(255,255,255,0.2);
+animation:zoom 0.3s ease;
+}
+
+@keyframes zoom{
+from{
+transform:scale(0.7);
+opacity:0;
+}
+
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+#viewer h2{
+margin-top:18px;
+font-size:32px;
+}
+
+.close{
+position:absolute;
+top:20px;
+right:30px;
+font-size:50px;
+cursor:pointer;
+transition:0.4s;
+}
+
+.close:hover{
+transform:rotate(180deg) scale(1.2);
+color:#4f8dff;
+}
+
+@media(max-width:700px){
+
+header{
+font-size:28px;
+}
+
+.aircraft img{
+height:200px;
+}
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.search-box input{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header onclick="goHome()">spotter.net</header>
+
+<div class="container">
+
+<div class="search-box">
+<input id="searchInput" placeholder="Immatriculation...">
+<button onclick="searchAircraft()">Rechercher</button>
+</div>
+
+<div id="homePage">
+<div class="grid">
+
+<div class="card" onclick="openAirline('Transavia Airlines')"><span>Transavia Airlines</span></div>
+<div class="card" onclick="openAirline('Transavia Airlines')"><span>Transavia Airlines</span></div>
+<div class="card" onclick="openAirline('Air Baltic')"><span>Air Baltic</span></div>
+<div class="card" onclick="openAirline('Ryanair')"><span>Ryanair</span></div>
+<div class="card" onclick="openAirline('Eurowings')"><span>Eurowings</span></div>
+<div class="card" onclick="openAirline('Tui Fly')"><span>Tui Fly</span></div>
+<div class="card" onclick="openAirline('Air France')"><span>Air France</span></div>
+<div class="card" onclick="openAirline('Air Corsica')"><span>Air Corsica</span></div>
+<div class="card" onclick="openAirline('ASL Airlines')"><span>ASL Airlines</span></div>
+<div class="card" onclick="openAirline('Vueling Airlines')"><span>Vueling</span></div>
+<div class="card" onclick="openAirline('Volotea')"><span>Volotea</span></div>
+<div class="card" onclick="openAirline('Air Europa')"><span>Air Europa</span></div>
+<div class="card" onclick="openAirline('Jet2')"><span>Jet2</span></div>
+<div class="card" onclick="openAllAircraft()"><span>ALL AIRCRAFT</span></div>
+
+</div>
+</div>
+
+<div id="airlinePage" class="hidden">
+<button class="back-btn" onclick="goHome()">⬅ Retour</button>
+<h2 id="title"></h2>
+<div class="grid" id="list"></div>
+</div>
+
+</div>
+
+<div id="viewer">
+<div class="close" onclick="closeViewer()">✖</div>
+<img id="vimg">
+<h2 id="vtitle"></h2>
+</div>
+
+<script>
+
+const airlines = {
+
+"Transavia France":[
+{immat:"F-GNEO",type:"A320neo",photo:"F-GNEO.jpg"},
+{immat:"F-HXSA",type:"A320neo",photo:"F-HXSA.jpg"},
+{immat:"F-HXSB",type:"A320neo",photo:"F-HXSB.jpg"},
+{immat:"F-HXSC",type:"A320neo",photo:"F-HXSC.jpg"},
+{immat:"F-HXSD",type:"A320neo",photo:"F-HXSD.jpg"},
+{immat:"F-HXSE",type:"A320neo",photo:"F-HXSE.jpg"},
+{immat:"F-HXSF",type:"A320neo",photo:"F-HXSF.jpg"},
+{immat:"F-HXSG",type:"A320neo",photo:"F-HXSG.jpg"},
+{immat:"F-HXSH",type:"A320neo",photo:"F-HXSH.jpg"},
+{immat:"F-HXSI",type:"A320neo",photo:"F-HXSI.jpg"},
+{immat:"F-HXSJ",type:"A320neo",photo:"F-HXSJ.jpg"},
+{immat:"F-HXSK",type:"A320neo",photo:"F-HXSK.jpg"},
+{immat:"F-HXSL",type:"A320neo",photo:"F-HXSL.jpg"},
+{immat:"F-HXSM",type:"A320neo",photo:"F-HXSM.jpg"},
+{immat:"F-HXSN",type:"A320neo",photo:"F-HXSN.jpg"},
+{immat:"F-HXSO",type:"A320neo",photo:"F-HXSO.jpg"},
+{immat:"F-HXSP",type:"A320neo",photo:"F-HXSP.jpg"},
+{immat:"F-HXSQ",type:"A320neo",photo:"F-HXSQ.jpg"},
+{immat:"F-HXSR",type:"A320neo",photo:"F-HXSR.jpg"},
+{immat:"F-HXST",type:"A320neo",photo:"F-HXST.jpg"},
+{immat:"F-HXSU",type:"A320neo",photo:"F-HXSU.jpg"},
+{immat:"F-HXSV",type:"A320neo",photo:"F-HXSV.jpg"},
+{immat:"F-HXSX",type:"A320neo",photo:"F-HXSX.jpg"},
+{immat:"F-HXSY",type:"A320neo",photo:"F-HXSY.jpg"},
+{immat:"F-HXSZ",type:"A320neo",photo:"F-HXSZ.jpg"},
+{immat:"F-HXIA",type:"A320neo",photo:"F-HXIA.jpg"},
+{immat:"F-HXIB",type:"A320neo",photo:"F-HXIB.jpg"},
+{immat:"F-HXIC",type:"A320neo",photo:"F-HXIC.jpg"},
+{immat:"F-HXID",type:"A320neo",photo:"F-HXID.jpg"},
+{immat:"F-HXIE",type:"A320neo",photo:"F-HXIE.jpg"},
+{immat:"F-HXIF",type:"A320neo",photo:"F-HXIF.jpg"}
+],
+
+"Air Baltic":[
+{immat:"YL-AAQ",type:"A220-300",photo:"YL-AAQ.jpg"}
+],
+
+"Air Corsica":[
+{immat:"F-HXKT",type:"A230neo",photo:"F-HXKT.jpg"}
+],
+
+"ASL Airlines":[
+{immat:"F-HIXC",type:"737-800",photo:"F-HIXC.jpg"}
+],
+
+"Ryanair":[
+{immat:"9H-QCQ",type:"737-800",photo:"9H-QCQ.jpg"},
+{immat:"EI-HAW",type:"737-MAX-8200",photo:"EI-HAW.jpg"},
+{immat:"EI-IHG",type:"737-MAX-8200",photo:"EI-IHG.jpg"},
+{immat:"EI-DLX",type:"737-800SS",photo:"EI-DLX.jpg"},
+{immat:"EI-IJA",type:"737-MAX-8200",photo:"EI-IJA.jpg"}
+],
+
+"Eurowings":[
+{immat:"D-AEEB",type:"A321neo",photo:"D-AEEB.jpg"}
+],
+
+"Tui Fly":[
+{immat:"OO-TMG",type:"737 MAX 8",photo:"OO-TMG.jpg"}
+],
+
+"Transavia Airlines":[],
+
+"Air France":[
+{immat:"F-GKXG",type:"A320-200",photo:"F-GKXG.jpg"},
+{immat:"F-GKXQ",type:"A320-200",photo:"F-GKXQ.jpg"},
+{immat:"F-HBND",type:"A320-200",photo:"F-HBND.jpg"},
+{immat:"F-HBNJ",type:"A320-200",photo:"F-HBNJ.jpg"},
+{immat:"F-GUGP",type:"A318-100",photo:"F-GUGP.jpg"},
+{immat:"F-GSQO",type:"777-300",photo:"F-GSQO.jpg"},
+{immat:"F-HBXG",type:"E170",photo:"F-HBXG.jpg"}
+],
+
+"Vueling Airlines":[
+{immat:"EC-MVO",type:"A320-200",photo:"EC-MVO.jpg"},
+{immat:"EC-NUO",type:"A320-200",photo:"EC-NUO.jpg"},
+{immat:"EC-OKH",type:"A320-200S",photo:"EC-OKH.jpg"},
+{immat:"EC-LVV",type:"A320-200S",photo:"EC-LVV.jpg"},
+{immat:"EC-MOO",type:"A321-200S",photo:"EC-MOO.jpg"},
+{immat:"EC-NLX",type:"A321-200S",photo:"EC-NLX.jpg"}
+],
+
+"Volotea":[
+{immat:"EC-ISI",type:"A320-200",photo:"EC-ISI.jpg"},
+{immat:"EC-NTL",type:"A320-200",photo:"EC-NTL.jpg"},
+{immat:"EC-NPB",type:"A320-200",photo:"EC-NPB.jpg"},
+{immat:"EC-OEL",type:"A320-200",photo:"EC-OEL.jpg"}
+],
+
+"Air Europa":[
+{immat:"EC-OGS",type:"737 MAX 8",photo:"EC-OGS.jpg"},
+{immat:"EC-OPA",type:"737 MAX 8",photo:"EC-OPA.jpg"},
+{immat:"EC-OPX",type:"737 MAX 8",photo:"EC-OPX.jpg"},
+{immat:"EC-OGS",type:"737 MAX 8",photo:"EC-OPY.jpg"},
+{immat:"EC-OPA",type:"737 MAX 8",photo:"EC-ORJ.jpg"},
+{immat:"EC-OPX",type:"737 MAX 8",photo:"EC-ORK.jpg"},
+{immat:"EC-OPX",type:"737 MAX 8",photo:"EC-OSS.jpg"},
+{immat:"EC-LPQ",type:"737-800",photo:"EC-LPQ.jpg"},
+{immat:"EC-MKL",type:"737-800",photo:"EC-MKL.jpg"},
+{immat:"EC-LUT",type:"737-800",photo:"EC-LUT.jpg"}
+],
+
+"Jet2":[
+{immat:"G-SUNB",type:"A321neo",photo:"G-SUNB.jpg"},
+{immat:"G-SUNC",type:"A321neo",photo:"G-SUNC.jpg"},
+{immat:"G-SUND",type:"A321neo",photo:"G-SUND.jpg"},
+{immat:"G-SUNE",type:"A321neo",photo:"G-SUNE.jpg"},
+{immat:"G-SUNF",type:"A321neo",photo:"G-SUNF.jpg"},
+{immat:"G-SUNG",type:"A321neo",photo:"G-SUNG.jpg"},
+{immat:"G-SUNH",type:"A321neo",photo:"G-SUNH.jpg"},
+{immat:"G-SUNI",type:"A321neo",photo:"G-SUNI.jpg"},
+{immat:"G-SUNJ",type:"A321neo",photo:"G-SUNJ.jpg"},
+{immat:"G-SUNK",type:"A321neo",photo:"G-SUNK.jpg"},
+{immat:"G-SUNL",type:"A321neo",photo:"G-SUNL.jpg"},
+{immat:"G-SUNM",type:"A321neo",photo:"G-SUNM.jpg"},
+{immat:"G-SUNN",type:"A321neo",photo:"G-SUNN.jpg"},
+{immat:"G-SUNO",type:"A321neo",photo:"G-SUNO.jpg"},
+{immat:"G-SUNP",type:"A321neo",photo:"G-SUNP.jpg"},
+{immat:"G-SUNQ",type:"A321neo",photo:"G-SUNQ.jpg"},
+{immat:"G-SUNR",type:"A321neo",photo:"G-SUNR.jpg"},
+{immat:"G-SUNS",type:"A321neo",photo:"G-SUNS.jpg"}
+]
+
+};
+
+function openAirline(name){
+
+const home = document.getElementById("homePage");
+const airlinePage = document.getElementById("airlinePage");
+const title = document.getElementById("title");
+const list = document.getElementById("list");
+
+home.classList.add("hidden");
+airlinePage.classList.remove("hidden");
+
+title.innerText = name;
+list.innerHTML = "";
+
+airlines[name].forEach(a=>{
+
+list.innerHTML += `
+<div class="aircraft">
+<img src="${a.photo}" onclick="openViewer('${a.photo}','${a.immat}')">
+<div class="info">
+<h3>${a.immat}</h3>
+<p>${a.type}</p>
+</div>
+</div>
+`;
+
+});
+
+}
+
+function openAllAircraft(){
+
+const home = document.getElementById("homePage");
+const airlinePage = document.getElementById("airlinePage");
+const title = document.getElementById("title");
+const list = document.getElementById("list");
+
+home.classList.add("hidden");
+airlinePage.classList.remove("hidden");
+
+title.innerText = "ALL AIRCRAFT";
+list.innerHTML = "";
+
+for(let airline in airlines){
+
+airlines[airline].forEach(a=>{
+
+list.innerHTML += `
+<div class="aircraft">
+<img src="${a.photo}" onclick="openViewer('${a.photo}','${a.immat}')">
+<div class="info">
+<h3>${a.immat}</h3>
+<p>${a.type}</p>
+</div>
+</div>
+`;
+
+});
+
+}
+
+}
+
+function goHome(){
+document.getElementById("homePage").classList.remove("hidden");
+document.getElementById("airlinePage").classList.add("hidden");
+closeViewer();
+}
+
+function searchAircraft(){
+
+let q = document.getElementById("searchInput").value.toUpperCase().trim();
+
+for(let c in airlines){
+
+let f = airlines[c].find(a=>a.immat.includes(q));
+
+if(f){
+
+openAirline(c);
+
+setTimeout(()=>{
+
+document.getElementById("list").innerHTML = `
+<div class="aircraft">
+<img src="${f.photo}" onclick="openViewer('${f.photo}','${f.immat}')">
+<div class="info">
+<h3>${f.immat}</h3>
+<p>${f.type}</p>
+</div>
+</div>`;
+
+},100);
+
+return;
+
+}
+
+}
+
+alert("Introuvable");
+
+}
+
+function openViewer(img,immat){
+
+document.getElementById("viewer").style.display="flex";
+document.getElementById("vimg").src=img;
+document.getElementById("vtitle").innerText=immat;
+
+}
+
+function closeViewer(){
+document.getElementById("viewer").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
